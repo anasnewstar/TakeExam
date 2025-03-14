@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Results - TakeExam</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .results-container {
+            min-height: 100vh;
+            background-color: #f8fafc;
+            padding: 100px 2rem 2rem;
+            /* Increased top padding to prevent navbar overlap */
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.75rem 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .back-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .results-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 8px solid #22c55e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem auto;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+
+        .score-label {
+            font-size: 0.875rem;
+            color: var(--gray-medium);
+        }
+
+        .exam-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: var(--gray-medium);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .questions-review {
+            margin-top: 2rem;
+        }
+
+        .question-item {
+            padding: 1.5rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            font-weight: 600;
+        }
+
+        .question-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-correct {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-incorrect {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .question-text {
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .answer-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+        }
+
+        .answer-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .answer-label {
+            font-size: 0.875rem;
+            color: var(--gray-medium);
+            margin-bottom: 0.25rem;
+        }
+
+        .answer-text {
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .retry-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .home-button {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 640px) {
+            .results-container {
+                padding: 80px 1rem 1rem;
+            }
+
+            .results-content {
+                padding: 1.5rem;
+            }
+
+            .exam-info {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .answer-section {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="results-container">
+        <header class="header">
+            <div class="header-content">
+                <h1>Exam Results</h1>
+                <a href="index.html" class="back-link">← Back to Home</a>
+            </div>
+        </header>
+
+        <div class="results-content">
+            <div class="results-header">
+                <div class="score-circle">
+                    <span class="score-value" id="scoreValue">0%</span>
+                    <span class="score-label">Final Score</span>
+                </div>
+            </div>
+
+            <div class="exam-info" id="examInfo">
+                <!-- Exam info will be populated by JavaScript -->
+            </div>
+
+            <div class="questions-review" id="questionsReview">
+                <!-- Questions review will be populated by JavaScript -->
+            </div>
+
+            <div class="action-buttons">
+                <a href="exam.html" class="action-button retry-button">Retry Exam</a>
+                <a href="index.html" class="action-button home-button">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const examData = JSON.parse(sessionStorage.getItem('currentExam'));
+            const studentAnswers = JSON.parse(sessionStorage.getItem('studentAnswers') || '[]');
+            const studentName = sessionStorage.getItem('studentName');
+            const examStartTime = new Date(sessionStorage.getItem('examStartTime'));
+            const examEndTime = new Date(sessionStorage.getItem('examEndTime'));
+
+            if (!examData || !studentAnswers || !studentName) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Calculate score
+            let correctAnswers = 0;
+            examData.questions.forEach((question, index) => {
+                if (studentAnswers[index] === question.correctAnswer) {
+                    correctAnswers++;
+                }
+            });
+
+            const score = Math.round((correctAnswers / examData.questions.length) * 100);
+            document.getElementById('scoreValue').textContent = `${score}%`;
+
+            // Display exam info
+            const timeTaken = Math.round((examEndTime - examStartTime) / 1000 / 60); // in minutes
+            document.getElementById('examInfo').innerHTML = `
+                <div class="info-item">
+                    <div class="info-label">Student Name</div>
+                    <div class="info-value">${studentName}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Exam Code</div>
+                    <div class="info-value">${examData.code}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Time Taken</div>
+                    <div class="info-value">${timeTaken} minutes</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Questions</div>
+                    <div class="info-value">${correctAnswers} / ${examData.questions.length} correct</div>
+                </div>
+            `;
+
+            // Display questions review
+            const questionsReview = document.getElementById('questionsReview');
+            examData.questions.forEach((question, index) => {
+                const isCorrect = studentAnswers[index] === question.correctAnswer;
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question-item';
+                questionElement.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-number">Question ${index + 1}</span>
+                        <span class="question-status ${isCorrect ? 'status-correct' : 'status-incorrect'}">
+                            ${isCorrect ? 'Correct' : 'Incorrect'}
+                        </span>
+                    </div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="answer-section">
+                        <div class="answer-item">
+                            <span class="answer-label">Your Answer</span>
+                            <span class="answer-text">${question.options[studentAnswers[index]] || 'Not answered'}</span>
+                        </div>
+                        <div class="answer-item">
+                            <span class="answer-label">Correct Answer</span>
+                            <span class="answer-text">${question.options[question.correctAnswer]}</span>
+                        </div>
+                    </div>
+                `;
+                questionsReview.appendChild(questionElement);
+            });
+        });
+    </script>
+</body>
+
+</html>

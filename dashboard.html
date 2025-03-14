@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - TakeExam</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-container {
+            min-height: 100vh;
+            background-color: #f8fafc;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .dashboard-main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--gray-light);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--gray-medium);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .upcoming-exams {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .exam-list {
+            margin-top: 1.5rem;
+        }
+
+        .exam-card {
+            padding: 1.5rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .exam-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .exam-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .exam-date {
+            color: var(--gray-medium);
+            font-size: 0.875rem;
+        }
+
+        .exam-details {
+            display: flex;
+            gap: 2rem;
+            color: var(--gray-medium);
+            font-size: 0.875rem;
+        }
+
+        .exam-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+        }
+
+        .progress-chart {
+            margin-top: 1.5rem;
+        }
+
+        .achievement-list {
+            margin-top: 2rem;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background: var(--gray-light);
+            margin-bottom: 1rem;
+        }
+
+        .achievement-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .achievement-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-info p {
+            font-size: 0.875rem;
+            color: var(--gray-medium);
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="logo">TakeExam</div>
+                <div class="user-menu">
+                    <div class="user-avatar">JS</div>
+                    <span>John Smith</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <div class="main-content">
+                <section class="welcome-section">
+                    <h1>Welcome back, John! 👋</h1>
+                    <p>Here's your learning progress</p>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Exams Completed</h3>
+                            <div class="value">12</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Average Score</h3>
+                            <div class="value">85%</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Study Streak</h3>
+                            <div class="value">7</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="upcoming-exams">
+                    <h2>Upcoming Exams</h2>
+                    <div class="exam-list">
+                        <div class="exam-card">
+                            <div class="exam-header">
+                                <h3 class="exam-title">Mathematics Final</h3>
+                                <span class="exam-date">Tomorrow, 10:00 AM</span>
+                            </div>
+                            <div class="exam-details">
+                                <span class="exam-detail">
+                                    <span>Duration:</span>
+                                    <span>2 hours</span>
+                                </span>
+                                <span class="exam-detail">
+                                    <span>Questions:</span>
+                                    <span>50</span>
+                                </span>
+                                <span class="exam-detail">
+                                    <span>Difficulty:</span>
+                                    <span>Medium</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="exam-card">
+                            <div class="exam-header">
+                                <h3 class="exam-title">Physics Quiz</h3>
+                                <span class="exam-date">Friday, 2:00 PM</span>
+                            </div>
+                            <div class="exam-details">
+                                <span class="exam-detail">
+                                    <span>Duration:</span>
+                                    <span>1 hour</span>
+                                </span>
+                                <span class="exam-detail">
+                                    <span>Questions:</span>
+                                    <span>30</span>
+                                </span>
+                                <span class="exam-detail">
+                                    <span>Difficulty:</span>
+                                    <span>Hard</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="sidebar">
+                <h2>Performance Overview</h2>
+                <div class="progress-chart">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+
+                <div class="achievement-list">
+                    <h3>Recent Achievements</h3>
+                    <div class="achievement-item">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-info">
+                            <h4>Perfect Score!</h4>
+                            <p>Scored 100% in Chemistry Quiz</p>
+                        </div>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-icon">🔥</div>
+                        <div class="achievement-info">
+                            <h4>Study Streak</h4>
+                            <p>7 days of continuous learning</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Performance Chart
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Average Score',
+                        data: [75, 82, 78, 85, 80, 88],
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function (value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Animate stats on scroll
+            const stats = document.querySelectorAll('.stat-card .value');
+            const animateStats = () => {
+                stats.forEach(stat => {
+                    const value = parseInt(stat.textContent);
+                    let current = 0;
+                    const increment = value / 30;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= value) {
+                            stat.textContent = value + (stat.textContent.includes('%') ? '%' : '');
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current) + (stat.textContent.includes('%') ? '%' : '');
+                        }
+                    }, 50);
+                });
+            };
+
+            // Intersection Observer for animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.classList.contains('stats-grid')) {
+                            animateStats();
+                        }
+                        entry.target.classList.add('animate');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // Observe elements
+            document.querySelectorAll('.stats-grid, .exam-card, .achievement-item').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+
+</html>

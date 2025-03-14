@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Exam - TakeExam</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .create-exam-container {
+            min-height: 100vh;
+            background-color: #f8fafc;
+            padding: 2rem;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .return-home {
+            padding: 0.5rem 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .return-home:hover {
+            background: #f0f9ff;
+        }
+
+        .create-exam-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h2 {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .questions-container {
+            margin-top: 2rem;
+        }
+
+        .question-card {
+            border: 1px solid var(--gray-light);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .add-question-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #f0f9ff;
+            color: var(--primary-color);
+            border: 2px dashed var(--primary-color);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .add-question-btn:hover {
+            background: #e0f2fe;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .save-btn,
+        .publish-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .save-btn {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .save-btn:hover {
+            background: #f0f9ff;
+        }
+
+        .publish-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .publish-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .remove-question-btn {
+            padding: 0.25rem 0.5rem;
+            background: #fef2f2;
+            color: #ef4444;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .remove-question-btn:hover {
+            background: #fee2e2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="create-exam-container">
+        <header class="header">
+            <h1>Create New Exam</h1>
+            <div class="header-actions">
+                <a href="teacher-dashboard.html" class="return-home">← Back to Dashboard</a>
+                <a href="index.html" class="return-home">← Back to Home</a>
+            </div>
+        </header>
+
+        <form class="create-exam-form" id="createExamForm">
+            <div class="form-section">
+                <h2>Exam Details</h2>
+                <div class="form-group">
+                    <label for="examTitle">Exam Title</label>
+                    <input type="text" id="examTitle" name="examTitle" required placeholder="Enter exam title">
+                </div>
+                <div class="form-group">
+                    <label for="examCode">Exam Code</label>
+                    <input type="text" id="examCode" name="examCode" required placeholder="Enter unique exam code">
+                </div>
+                <div class="form-group">
+                    <label for="examDuration">Duration (minutes)</label>
+                    <input type="number" id="examDuration" name="examDuration" required min="15"
+                        placeholder="Enter exam duration">
+                </div>
+                <div class="form-group">
+                    <label for="examInstructions">Instructions</label>
+                    <textarea id="examInstructions" name="examInstructions" rows="4"
+                        placeholder="Enter exam instructions"></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Questions</h2>
+                <div id="questionsContainer" class="questions-container">
+                    <!-- Question template will be added here -->
+                </div>
+                <button type="button" class="add-question-btn" id="addQuestionBtn">+ Add Question</button>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="save-btn" id="saveAsDraftBtn">Save as Draft</button>
+                <button type="submit" class="publish-btn">Publish Exam</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if teacher is logged in
+            const teacherInfo = JSON.parse(sessionStorage.getItem('currentTeacher'));
+            if (!teacherInfo) {
+                window.location.href = 'teacher-login.html';
+                return;
+            }
+
+            const form = document.getElementById('createExamForm');
+            const questionsContainer = document.getElementById('questionsContainer');
+            const addQuestionBtn = document.getElementById('addQuestionBtn');
+            let questionCount = 0;
+
+            function createQuestionCard() {
+                questionCount++;
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.innerHTML = `
+                    <div class="question-header">
+                        <h3>Question ${questionCount}</h3>
+                        <button type="button" class="remove-question-btn">Remove</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Question Text</label>
+                        <textarea name="question_${questionCount}" required rows="3" placeholder="Enter your question"></textarea>
+                    </div>
+                    <div class="options-grid">
+                        <div class="option-input">
+                            <input type="radio" name="correct_${questionCount}" value="A" required>
+                            <input type="text" name="option_${questionCount}_A" placeholder="Option A" required>
+                        </div>
+                        <div class="option-input">
+                            <input type="radio" name="correct_${questionCount}" value="B" required>
+                            <input type="text" name="option_${questionCount}_B" placeholder="Option B" required>
+                        </div>
+                        <div class="option-input">
+                            <input type="radio" name="correct_${questionCount}" value="C" required>
+                            <input type="text" name="option_${questionCount}_C" placeholder="Option C" required>
+                        </div>
+                        <div class="option-input">
+                            <input type="radio" name="correct_${questionCount}" value="D" required>
+                            <input type="text" name="option_${questionCount}_D" placeholder="Option D" required>
+                        </div>
+                    </div>
+                `;
+
+                questionCard.querySelector('.remove-question-btn').addEventListener('click', () => {
+                    questionCard.remove();
+                    updateQuestionNumbers();
+                });
+
+                return questionCard;
+            }
+
+            function updateQuestionNumbers() {
+                const questions = questionsContainer.querySelectorAll('.question-card');
+                questions.forEach((card, index) => {
+                    card.querySelector('h3').textContent = `Question ${index + 1}`;
+                });
+                questionCount = questions.length;
+            }
+
+            addQuestionBtn.addEventListener('click', () => {
+                questionsContainer.appendChild(createQuestionCard());
+            });
+
+            // Add initial question
+            addQuestionBtn.click();
+
+            // Handle form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const examData = {
+                    title: formData.get('examTitle'),
+                    code: formData.get('examCode'),
+                    duration: formData.get('examDuration'),
+                    instructions: formData.get('examInstructions'),
+                    questions: [],
+                    status: 'active',
+                    teacherId: teacherInfo.username,
+                    createdAt: new Date().toISOString()
+                };
+
+                // Collect questions
+                const questions = questionsContainer.querySelectorAll('.question-card');
+                questions.forEach((card, index) => {
+                    const questionNumber = index + 1;
+                    const question = {
+                        text: formData.get(`question_${questionNumber}`),
+                        options: {
+                            A: formData.get(`option_${questionNumber}_A`),
+                            B: formData.get(`option_${questionNumber}_B`),
+                            C: formData.get(`option_${questionNumber}_C`),
+                            D: formData.get(`option_${questionNumber}_D`)
+                        },
+                        correctAnswer: formData.get(`correct_${questionNumber}`)
+                    };
+                    examData.questions.push(question);
+                });
+
+                // Save exam to localStorage
+                const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+                exams.push(examData);
+                localStorage.setItem('exams', JSON.stringify(exams));
+
+                alert('Exam created successfully!');
+                window.location.href = 'teacher-dashboard.html';
+            });
+
+            // Handle save as draft
+            document.getElementById('saveAsDraftBtn').addEventListener('click', () => {
+                const formData = new FormData(form);
+                const examData = {
+                    title: formData.get('examTitle'),
+                    code: formData.get('examCode'),
+                    duration: formData.get('examDuration'),
+                    instructions: formData.get('examInstructions'),
+                    questions: [],
+                    status: 'draft',
+                    teacherId: teacherInfo.username,
+                    createdAt: new Date().toISOString()
+                };
+
+                // Save draft to localStorage
+                const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+                exams.push(examData);
+                localStorage.setItem('exams', JSON.stringify(exams));
+
+                alert('Exam saved as draft!');
+                window.location.href = 'teacher-dashboard.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

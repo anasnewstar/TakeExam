@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TakeExam - Online Examination Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">TakeExam</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="questions.html">Questions</a></li>
+                <li><a href="teacher-signup.html" class="signup-btn">Sign-up</a></li>
+                <li><a href="teacher-login.html" class="login-btn">Log-in</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <h1 class="animate__animated animate__fadeIn">Welcome to TakeExam</h1>
+                <p class="animate__animated animate__fadeIn animate__delay-1s">
+                    The next generation examination platform for students and teachers
+                </p>
+                <div class="hero-stats animate__animated animate__fadeIn animate__delay-2s">
+                    <div class="stat-card">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Students</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">1K+</span>
+                        <span class="stat-label">Teachers</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Exams</span>
+                    </div>
+                </div>
+                <div class="join-exam-section">
+                    <h2>Join an Exam</h2>
+                    <form id="joinExamForm" class="join-exam-form">
+                        <input type="text" id="examCode" placeholder="Enter Exam Code" required>
+                        <input type="text" id="studentName" placeholder="Your Full Name" required>
+                        <button type="submit" class="primary-btn">Join Exam</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <h2>Key Features</h2>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <i class="feature-icon">📝</i>
+                    <h3>Smart Exam Creation</h3>
+                    <p>Create engaging exams with multiple question types, rich text formatting, and multimedia support.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <i class="feature-icon">⏱️</i>
+                    <h3>Time Management</h3>
+                    <p>Set custom time limits and track progress with our intuitive interface.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="feature-icon">📊</i>
+                    <h3>Detailed Analytics</h3>
+                    <p>Get comprehensive insights with performance tracking and detailed reports.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>TakeExam is your trusted partner in online education and assessment.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: rubayetahmedrony.acc18@gmail.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 TakeExam. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.createElement('button');
+            mobileMenuBtn.className = 'mobile-menu-btn';
+            mobileMenuBtn.innerHTML = '☰';
+            document.querySelector('.nav-container').appendChild(mobileMenuBtn);
+
+            const navLinks = document.querySelector('.nav-links');
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            // Join Exam Form Handler
+            const joinExamForm = document.getElementById('joinExamForm');
+            joinExamForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const examCode = document.getElementById('examCode').value;
+                const studentName = document.getElementById('studentName').value;
+
+                if (!examCode || !studentName) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+
+                // Check if exam exists and is active
+                const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+                const exam = exams.find(e => e.code === examCode && e.status === 'active');
+
+                if (!exam) {
+                    alert('Invalid exam code or exam is not active');
+                    return;
+                }
+
+                // Store student info and exam data in sessionStorage
+                sessionStorage.setItem('studentName', studentName);
+                sessionStorage.setItem('examCode', examCode);
+                sessionStorage.setItem('currentExam', JSON.stringify(exam));
+                sessionStorage.setItem('examStartTime', new Date().toISOString());
+
+                // Redirect to exam page
+                window.location.href = 'exam.html';
+            });
+
+            // Animate stats on scroll
+            const stats = document.querySelectorAll('.stat-number');
+            const animateStats = () => {
+                stats.forEach(stat => {
+                    const value = parseInt(stat.textContent);
+                    let current = 0;
+                    const increment = value / 30;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= value) {
+                            stat.textContent = value + '+';
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current) + '+';
+                        }
+                    }, 50);
+                });
+            };
+
+            // Intersection Observer for animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.classList.contains('hero-stats')) {
+                            animateStats();
+                        }
+                        entry.target.classList.add('animate');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // Observe elements
+            document.querySelectorAll('.feature-card, .hero-stats').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+
+    <style>
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        main {
+            padding-top: 80px;
+            /* Add padding to prevent content from hiding behind navbar */
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links .active {
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .nav-links .active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .signup-btn,
+        .login-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 120px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .signup-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .signup-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-btn {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .login-btn:hover {
+            background: #f0f9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                box-shadow: var(--shadow-md);
+                z-index: 1000;
+                align-items: stretch;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 0.75rem;
+            }
+
+            .signup-btn,
+            .login-btn {
+                width: 100%;
+                max-width: 200px;
+                margin: 0 auto;
+                display: block;
+            }
+        }
+
+        .join-exam-section {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .join-exam-section h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .join-exam-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .join-exam-form input {
+            padding: 0.75rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .join-exam-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .join-exam-form button {
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .join-exam-section {
+                margin: 2rem;
+            }
+        }
+
+        .hero-section {
+            margin-top: -80px;
+            /* Compensate for the main padding */
+            padding-top: 80px;
+            /* Add padding back to maintain spacing */
+        }
+    </style>
+</body>
+
+</html>
